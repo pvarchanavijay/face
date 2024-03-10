@@ -1,0 +1,51 @@
+{% include "admin/header.html" %}
+{% include "admin/footer.html" %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Sessions</h1>
+    
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">List of Completed Sessions</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Date</th>
+                            <th>Starting Time</th>
+                            <th>Ending Time</th>
+                            <th>Action</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in sdata15 %}
+                            <tr>
+                                <td>{{ data[1] }}</td>
+                                <td>{{ data[2] }}</td>
+                                <td>{{ data[3] }}</td>
+                                <td>{{ data[4] }}</td> 
+                                <td>
+                                    <a href="/admin/liststudents" class="btn btn-success btn-icon-split">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <span class="text">Students List</span>
+                                    </a>
+                                </td>                               
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
