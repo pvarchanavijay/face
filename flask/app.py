@@ -341,7 +341,55 @@ def approvestudents():
                         </script>
         
                 '''
+    
 
+@app.route('/rejectstudents', methods=['GET'])
+def rejectstudents():
+    id = request.args.get('id')
+    sql16 = "UPDATE login SET userstatus=-2 WHERE email=%s"
+    data = (id,)  
+    data16 = update_record(sql16, data) 
+    if data16:
+        return '''
+                <script>
+                alert('Rejected a Student ');
+                window.location.href = '/rejected';
+                        </script>
+        
+            '''
+
+    else:
+        return '''
+                <script>
+                alert('Error Occured');
+                window.location.href = '/pending';
+                        </script>
+        
+                '''
+    
+@app.route('/suspendstudents', methods=['GET'])
+def suspendstudents():
+    id = request.args.get('id')
+    sql17 = "UPDATE login SET userstatus=-1 WHERE email=%s"
+    data = (id,)  
+    data17 = update_record(sql17, data) 
+    if data17:
+        return '''
+                <script>
+                alert('Suspended a Student ');
+                window.location.href = '/suspended';
+                        </script>
+        
+            '''
+
+    else:
+        return '''
+                <script>
+                alert('Error Occured');
+                window.location.href = '/active';
+                        </script>
+        
+                '''
 
 @app.route('/createsession', methods=['POST'])
 def createsession():

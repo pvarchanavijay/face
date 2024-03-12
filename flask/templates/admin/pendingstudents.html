@@ -10,7 +10,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Pending Students</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -45,13 +45,23 @@
                                     
                                 </td>
                                 <td>
+                                    <div class="my-2"></div>
                                     <a href="/approvestudents?id={{ student[2] }}" class="btn btn-success btn-icon-split">
                                         <span class="icon text-white-50">
                                             <i class="fas fa-check"></i>
                                         </span>
-                                        <span class="text">Approve</span>
+                                        <span class="text">Accept</span>
+                                    </a>
+                                    
+                                    <div class="my-2"></div>
+                                    <a href="/rejectstudents?id={{ student[2] }}" class="btn btn-danger btn-icon-split">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-trash"></i>
+                                        </span>
+                                        <span class="text">Reject</span>
                                     </a>
                                 </td>
+                               
                             </tr>
                         {% endfor %}
                     </tbody>
