@@ -1,6 +1,7 @@
 import csv
 from urllib import response
 from flask import Flask, render_template,request,session,g,jsonify,send_from_directory
+from flask_mail import Mail,Message
 import mysql.connector
 
 import cv2
@@ -14,6 +15,13 @@ import time
 import os
 
 app = Flask(__name__)
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'archanapv347@gmail.com'
+app.config['MAIL_PASSWORD'] = 'kptr dzjj sybx tuye'
+
+mail = Mail(app)
 
 
 app.secret_key = 'pv'
@@ -325,6 +333,10 @@ def approvestudents():
     data = (id,)  # Prepare data as a tuple
     data11 = update_record(sql11, data)  # Provide both SQL query and data
     if data11:
+        student_email = id  
+        msg = Message("Account Approved", sender="archanapv347@gmail.com", recipients=[student_email])
+        msg.body = "Your account has been approved. You can now login to your account."
+        mail.send(msg)
         return '''
                 <script>
                 alert('Approved a Student ');
@@ -350,6 +362,10 @@ def rejectstudents():
     data = (id,)  
     data16 = update_record(sql16, data) 
     if data16:
+        student_email = id  
+        msg = Message("Account Rejected", sender="archanapv347@gmail.com", recipients=[student_email])
+        msg.body = "Your account has been rejected."
+        mail.send(msg)
         return '''
                 <script>
                 alert('Rejected a Student ');
@@ -374,6 +390,10 @@ def suspendstudents():
     data = (id,)  
     data17 = update_record(sql17, data) 
     if data17:
+        student_email = id  
+        msg = Message("Account Suspended", sender="archanapv347@gmail.com", recipients=[student_email])
+        msg.body = "Your account has been suspended. You can't login to your account until further notice."
+        mail.send(msg)
         return '''
                 <script>
                 alert('Suspended a Student ');
@@ -447,6 +467,17 @@ def adminliststudents():
     data15 = select_records(sql15)
     return render_template('admin/studentlist.html', sdata15=data15)
 
+@app.route('/logout')
+def logout():
+    session.clear()
+    return '''
+                <script>
+                alert('You have been logged out');
+                window.location.href = '/';
+                        </script>
+        
+                '''
+
 
 # ==========================================================================
 
@@ -476,7 +507,78 @@ def buttons():
 def cards():
     return render_template('user/cards.html')
 
+
+@app.route("/detectface/")
+def detectfaceindex():
+	user=session['user']
+
+
+	faceCascade=cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+	clf=cv2.face.LBPHFaceRecognizer_create()
+	clf.read("clf.xml")
+
+	start_time = time.time()
+
+	videoCap=cv2.VideoCapture(0)
+
+	while True:
+		ret,img=videoCap.read()
+		data=recognize(img,clf,faceCascade)
+		cv2.imshow("Face Detector",data[0])
+		print(data[1])
+
+		if cv2.waitKey(1) == 27:
+
+			videoCap.release()
+			cv2.destroyAllWindows()
+
+			return '''
+						<script>
+						alert('Exited from attendance mode');
+						window.location.href = '/admin/';
+						</script>
+						'''
+
+
 # =============================================================
+        
+
+
+
+def draw_boundray(img,classifier,scaleFactor,minNeighbors,color,text,clf):
+	gray_image=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+	featuers=classifier.detectMultiScale(gray_image,scaleFactor,minNeighbors)
+
+	user=session['user']
+	userid=user[0]
+
+	flag=False
+
+
+	coord=[]
+	
+	for (x,y,w,h) in featuers:
+		cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),3)#croping the face
+		id,predict=clf.predict(gray_image[y:y+h,x:x+w])
+
+		confidence=int((100*(1-predict/300)))
+
+		
+
+		# print(id==userid)
+
+		if confidence > 80:
+			if userid==id:
+				flag=True
+		
+
+		coord=[x,y,w,y]
+	
+	return flag
+
+def recognize(img,clf,faceCascade):
+	flag=draw_boundray(img,faceCascade,1.1,10,(255,25,255),"Face",clf)
+	return (img,flag)
 
 
 # ======================= Common Functions ends ===============================

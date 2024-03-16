@@ -33,14 +33,14 @@ Author URL: http://w3layouts.com
 				<div class="login-form">
 					<form action="/submitregister" method="post" >
 						<div class="form-fields d-grid">
-							<input type="text" name="fname" placeholder="Full Name" required="required" />
+							<input type="text" name="fname" placeholder="Full Name" pattern="[a-zA-Z\s]+" title="Please enter a valid name (only letters and spaces)" required="required" />
 							<input type="email" name="email" placeholder="Email" required="required" />
 							<input type="text" name="rollno" placeholder="Roll number" required="required" />
-							<input type="text" name="dob" placeholder="Date of Birth" required="required" />
+							<input type="text" name="dob" placeholder="Date of Birth" required="required" pattern="\d{2}-\d{2}-\d{4}" title="Please enter a valid date (DD-MM-YYY)" />
 							<input type="text" name="course" placeholder="Course" required="required" />
-							<input type="text" name="semester" placeholder="Semester" required="required" />
-							<input type="text" name="gender" placeholder="Gender" required="required" />
-							<input type="text" name="phone" placeholder="Phone Number" required="required" />
+							<input type="text" name="semester" placeholder="Semester" required="required" pattern="[0-6]+" title="Enter values only upto 6"/>
+							<input type="text" name="gender" placeholder="Gender" required="required" pattern="^(male|female|Female|Male|MALE|FEMALE)$" title="Please enter 'male' or 'female' " />	
+							<input type="text" name="phone" placeholder="Phone Number" required="required" pattern="[0-9]{10}" title="Please enter a 10-digit phone number" />
 							<input type="password" name="password" placeholder="Password" required="required" />
 							<input type="password" name="cpass" placeholder="Confirm Password" required="required" />
 
